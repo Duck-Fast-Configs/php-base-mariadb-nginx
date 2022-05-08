@@ -1,0 +1,7 @@
+[client]
+port         = 3306
+
+[mysqld]
+user         = root
+port         = 3306
+bind-address = dfc-host-mariadb

@@ -1,0 +1,70 @@
+version: '3.3'
+services:
+  dfc-host-php:
+    build: 
+      context: .
+      dockerfile: Scripts/Containers/dfc-host-php/Setup/Load/dockerfile
+    image: ${project_name}--dfc-host-php
+    hostname: dfc-host-php
+    restart: always
+    tty: true
+    container_name: ${project_name}--dfc-host-php
+    working_dir: /dfc-project/files
+    volumes:
+      - ./WorkFolder/Containers/dfc-host-php/Logs:/var/log:rw
+      - ./WorkFolder/Containers/dfc-host-php/Files:/dfc-project/files:rw
+      - ./WorkFolder/Containers/dfc-host-php/Configs/ClamAV:/etc/clamav:ro
+      - ./WorkFolder/Containers/dfc-host-php/Configs/Neofetch:/home/dfc-user/.config/neofetch:ro
+      - ./WorkFolder/Containers/Common/Firewall:/dfc-project/common/firewall:ro
+      - ./WorkFolder/Containers/Common/Antivirus:/var/lib/clamav:ro
+    networks:
+      - dfc-net
+
+  dfc-host-mariadb:
+    build: 
+      context: .
+      dockerfile: Scripts/Containers/dfc-host-mariadb/Setup/Load/dockerfile
+    image: ${project_name}--dfc-host-mariadb
+    hostname: dfc-host-mariadb
+    restart: always
+    tty: true
+    container_name: ${project_name}--dfc-host-mariadb
+    working_dir: /dfc-project/dumps
+    volumes:
+      - ./WorkFolder/Containers/dfc-host-mariadb/Logs:/var/log:rw
+      - ./WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Scheduled:/dfc-project/dumps/exported/scheduled:rw
+      - ./WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled:/dfc-project/dumps/exported/unscheduled:rw
+      - ./WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported:/dfc-project/dumps/imported:rw
+      - ./WorkFolder/Containers/dfc-host-mariadb/Configs/ClamAV:/etc/clamav:ro
+      - ./WorkFolder/Containers/dfc-host-mariadb/Configs/Neofetch:/home/dfc-user/.config/neofetch:ro
+      - ./WorkFolder/Containers/Common/Firewall:/dfc-project/common/firewall:ro
+      - ./WorkFolder/Containers/Common/Antivirus:/var/lib/clamav:ro
+    networks:
+      - dfc-net
+
+  dfc-host-nginx:
+    build: 
+      context: .
+      dockerfile: Scripts/Containers/dfc-host-nginx/Setup/Load/dockerfile
+    image: ${project_name}--dfc-host-nginx
+    hostname: dfc-host-nginx
+    restart: always
+    tty: true
+    container_name: ${project_name}--dfc-host-nginx
+    working_dir: /dfc-project/files
+    volumes:
+      - ./WorkFolder/Containers/dfc-host-nginx/Logs:/var/log:rw
+      - ./WorkFolder/Containers/dfc-host-php/Files:/dfc-project/files:rw
+      - ./WorkFolder/Containers/dfc-host-nginx/Configs/ClamAV:/etc/clamav:ro
+      - ./WorkFolder/Containers/dfc-host-nginx/Configs/Neofetch:/home/dfc-user/.config/neofetch:ro
+      - ./WorkFolder/Containers/Common/Firewall:/dfc-project/common/firewall:ro
+      - ./WorkFolder/Containers/Common/Antivirus:/var/lib/clamav:ro
+    ports:
+      - 443:443
+    networks:
+      - dfc-net
+
+networks:
+  dfc-net:
+    name: dfc-net--${project_name}
+    driver: bridge
