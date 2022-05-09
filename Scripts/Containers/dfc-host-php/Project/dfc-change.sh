@@ -162,7 +162,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
 
         message_space 1
-        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
         message_space 1
         message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
         message_input "=> "
@@ -261,7 +261,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&3
 
         message_space 1
-        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
         message_space 1
         message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
         message_input "=> "
@@ -466,7 +466,7 @@ case $dfc_project_input_choice in
         message_info "Пароль - '$dfc_local__project_magento_admin_pass'" 1
         message_space 1
 
-        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
         message_space 1
         message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
         message_input "=> "
@@ -590,7 +590,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
 
         message_space 1
-        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
         message_space 1
         message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
         message_input "=> "
