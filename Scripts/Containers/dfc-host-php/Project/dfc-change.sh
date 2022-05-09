@@ -16,6 +16,8 @@ message_input "1. Стандартный проект\n"
 message_input "2. Moodle проект\n"
 message_input "3. PHPBB проект\n"
 message_input "4. Magento проект\n"
+message_input "5. WordPress проект\n"
+message_input "6. Пропустить выбор варианта проекта\n"
 message_input "=> "
 read -p '' dfc_project_input_choice
 
@@ -494,6 +496,132 @@ case $dfc_project_input_choice in
         ;;
     esac
     ;;
+"5")
+    message_space 1
+    message_input "Варианты разворачивания:\n"
+    message_input "1. Начать новый 'WordPress' проект\n"
+    message_input "2. Скачать проект типа 'WordPress' с помощью git (только https)\n"
+    message_input "3. Проектом типа 'WordPress' поделился другой человек\n"
+    message_input "4. Выйти\n"
+    message_input "=> "
+    read -p '' dfc_project_container
+    message_space 1
+
+    case $dfc_project_container in
+    "1")
+        message_info "Ожидайте..." 1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-json.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-curl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-dom.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-exif.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-fileinfo.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-mbstring.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-openssl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-xml.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-zip.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-bcmath.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-gd.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-iconv.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-intl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-simplexml.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-sodium.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-xmlreader.sh -d1) >&3
+
+        message_info "В контейнере 'dfc-host-nginx' вносим изменения в Nginx" 1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Services/Stop && sh dfc-nginx.sh -d1) >&3
+        docker cp $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Project/wordpress/nginx.conf $dfc_global__project_name--dfc-host-nginx:/tmp >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "rm -f /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "mv /tmp/nginx.conf /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "chmod 0744 /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "chown root:root /etc/nginx/nginx.conf" >&1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Services/Start && sh dfc-nginx.sh -d1) >&3
+
+        message_info "В контейнере 'dfc-host-php' очищаем целевую папку" 1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/*" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/.*" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "mkdir -p /dfc-project/files/" >&1
+
+        message_info "В контейнере 'dfc-host-php' скачиваем WordPress (5.9.3)" 1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -f /tmp/wordpress.zip" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /tmp/WordPress-5.9.3" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "curl -sS https://codeload.github.com/WordPress/WordPress/zip/refs/tags/5.9.3 > /tmp/wordpress.zip" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "unzip /tmp/wordpress.zip -d /tmp" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "cp -r /tmp/WordPress-5.9.3/. /dfc-project/files" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -f /tmp/wordpress.zip" >&1
+        ;;
+    "2")
+        message_info "Ожидайте..." 1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-json.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-curl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-dom.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-exif.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-fileinfo.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-mbstring.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-openssl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-xml.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-zip.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-bcmath.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-gd.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-iconv.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-intl.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-simplexml.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-sodium.sh -d1) >&3
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup && sh dfc-php-xmlreader.sh -d1) >&3
+
+        message_info "В контейнере 'dfc-host-nginx' вносим изменения в Nginx" 1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Services/Stop && sh dfc-nginx.sh -d1) >&3
+        docker cp $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Project/wordpress/nginx.conf $dfc_global__project_name--dfc-host-nginx:/tmp >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "rm -f /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "mv /tmp/nginx.conf /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "chmod 0744 /etc/nginx/nginx.conf" >&1
+        docker-compose -p $dfc_global__project_name exec -u root dfc-host-nginx ash -c "chown root:root /etc/nginx/nginx.conf" >&1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-nginx/Services/Start && sh dfc-nginx.sh -d1) >&3
+
+        message_info "В контейнере 'dfc-host-php' очищаем целевую папку" 1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/*" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/.*" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "mkdir -p /dfc-project/files" >&1
+
+        message_info "В контейнере 'dfc-host-php' скачиваем репозиторий" 1
+        message_space 1
+        message_input "Вставьте ссылку на проект из git (только https)\n"
+        message_input "=> "
+        read -p '' dfc_project_url
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&1
+
+        message_space 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
+        message_space 1
+        message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
+        message_input "=> "
+        read -p '' dfc_project_option
+        message_space 1
+
+        case $dfc_project_option in
+        "y")
+            (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-mariadb/DB && sh dfc-import-db.sh -d1) >&3
+            ;;
+        *)
+            message_info "Импорт БД пропущен"
+        
+            . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
+            ;;
+        esac
+        ;;
+    "3")
+        message_info "Ожидайте..." 1
+        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-mariadb/DB && sh dfc-import-db.sh -d1) >&3
+        message_info "В контейнере 'dfc-host-mariadb' произведен импорт БД" 1
+        ;;
+    "4")
+        . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
+        ;;
+    *)
+        . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
+        ;;
+    esac
+    ;;
+"6")
     . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
     ;;
 esac
