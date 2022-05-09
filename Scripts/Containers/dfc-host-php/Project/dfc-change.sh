@@ -159,7 +159,7 @@ case $dfc_project_input_choice in
         message_input "Вставьте ссылку на проект из git (только https)\n"
         message_input "=> "
         read -p '' dfc_project_url
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
 
         message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
@@ -258,7 +258,7 @@ case $dfc_project_input_choice in
         message_input "Вставьте ссылку на проект из git (только https)\n"
         message_input "=> "
         read -p '' dfc_project_url
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&3
 
         message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
@@ -430,7 +430,7 @@ case $dfc_project_input_choice in
         message_input "Вставьте ссылку на проект из git (только https)\n"
         message_input "=> "
         read -p '' dfc_project_url
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&3
 
         message_space 1
 
@@ -587,7 +587,7 @@ case $dfc_project_input_choice in
         message_input "Вставьте ссылку на проект из git (только https)\n"
         message_input "=> "
         read -p '' dfc_project_url
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
 
         message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Exported/Unscheduled/db_base.sql'" 1
