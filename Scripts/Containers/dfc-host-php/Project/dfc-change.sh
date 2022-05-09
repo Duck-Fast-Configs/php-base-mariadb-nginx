@@ -108,7 +108,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "mkdir -p /dfc-project/files/moodle" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "mkdir -p /dfc-project/files/moodledata" >&1
 
-        message_info "В контейнере 'dfc-host-php' скачиваем Moodle 4.0.0" 1
+        message_info "В контейнере 'dfc-host-php' скачиваем Moodle (4.0.0)" 1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -f /tmp/moodle.zip" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /tmp/moodle-4.0.0" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "curl -sS https://codeload.github.com/moodle/moodle/zip/refs/tags/v4.0.0 > /tmp/moodle.zip" >&1
@@ -225,7 +225,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/*" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /dfc-project/files/.*" >&1
 
-        message_info "В контейнере 'dfc-host-php' скачиваем PHPBB 3.3.6" 1
+        message_info "В контейнере 'dfc-host-php' скачиваем PHPBB (3.3.6)" 1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -f /tmp/phpbb.zip" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "rm -rf /tmp/phpBB3" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "curl -sS https://download.phpbb.com/pub/release/3.3/3.3.6/phpBB-3.3.6.zip > /tmp/phpbb.zip" >&1
