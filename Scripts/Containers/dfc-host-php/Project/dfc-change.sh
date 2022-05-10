@@ -483,6 +483,9 @@ case $dfc_project_input_choice in
             . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
             ;;
         esac
+
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php bin/magento setup:store-config:set --base-url='http://localhost/'" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php bin/magento setup:store-config:set --base-url-secure='https://localhost/'" >&1
         ;;
     "3")
         message_info "Ожидайте..." 1
