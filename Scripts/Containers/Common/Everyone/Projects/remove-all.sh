@@ -10,7 +10,7 @@ dfc_project_main_folder="../../../../.."
 # General process
 message_info "$(date '+%H:%M:%S (%d/%m/%Y)')" 2
 message_space 2
-message_input "Вы точно хотите удалить все docker и dfc проекты? (y/n)\n"
+message_input "Вы точно хотите удалить все docker и dfc-проекты? (y/n)\n"
 message_input "=> "
 read -p '' dfc_project_input_choice
 message_space 1
