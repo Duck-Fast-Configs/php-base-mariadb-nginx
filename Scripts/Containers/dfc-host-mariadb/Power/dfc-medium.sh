@@ -9,6 +9,8 @@ dfc_project_main_folder="../../../.."
 
 # General process
 message_info "$(date '+%H:%M:%S (%m/%d/%y)')" 2
+message_space 2
+
 docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-mariadb ash -c "echo -n "" > /home/dfc-user/.power.sh" >&1
 docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "echo 'pkill -f cpulimit' >> /home/dfc-user/.power.sh" >&1
 docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "echo 'for process in \$(echo \"\$(ps -eo pid)\" |  sed s/\" \"//g); do zsh -c \"cpulimit --pid=\$process --limit=\$(echo '\$((\$(nproc --all) * (1 * 100 / 3 * 2)))')\" & done' >> /home/dfc-user/.power.sh" >&1
