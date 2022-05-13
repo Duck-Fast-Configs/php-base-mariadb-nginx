@@ -41,9 +41,40 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "echo \"<?php \necho 'Hello world';\" > index.php" >&1
         ;;
     "2")
-        message_info "Ожидайте..." 1
-        (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-mariadb/DB && sh dfc-import-db.sh -d1) >&3
-        message_info "В контейнере 'dfc-host-mariadb' произведен импорт БД" 1
+        message_info "В контейнере 'dfc-host-php' скачиваем репозиторий" 1
+        message_space 1
+        message_input "Вставьте ссылку на проект из git (только https)\n"
+        message_input "=> "
+        read -p '' dfc_project_url
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files" >&3
+
+        message_space 1
+        
+        message_info "В контейнере 'dfc-host-php' изменяем целевую ветку" 1
+        message_space 1
+        message_input "Напишите название ветки\n"
+        message_input "=> "
+        read -p '' dfc_project_branch
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git checkout ${dfc_project_branch}" >&3
+
+        message_space 1
+        message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
+        message_space 1
+        message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
+        message_input "=> "
+        read -p '' dfc_project_option
+        message_space 1
+
+        case $dfc_project_option in
+        "y")
+            (cd $dfc_project_main_folder/Scripts/Containers/dfc-host-mariadb/DB && sh dfc-import-db.sh -d1) >&3
+            ;;
+        *)
+            message_info "Импорт БД пропущен"
+        
+            . $dfc_project_main_folder/Scripts/Dependencies/dfc-message-exit.sh >&3
+            ;;
+        esac
         ;;
     "3")
         message_info "Ожидайте..." 1
@@ -162,6 +193,15 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
 
         message_space 1
+        
+        message_info "В контейнере 'dfc-host-php' изменяем целевую ветку" 1
+        message_space 1
+        message_input "Напишите название ветки\n"
+        message_input "=> "
+        read -p '' dfc_project_branch
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "cd /dfc-project/files/moodle && git checkout ${dfc_project_branch}" >&3
+
+        message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
         message_space 1
         message_input "Вы поместили дамп базы данных проекта по пути выше? (y/n)\n"
@@ -259,6 +299,15 @@ case $dfc_project_input_choice in
         message_input "=> "
         read -p '' dfc_project_url
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} ." >&3
+
+        message_space 1
+
+        message_info "В контейнере 'dfc-host-php' изменяем целевую ветку" 1
+        message_space 1
+        message_input "Напишите название ветки\n"
+        message_input "=> "
+        read -p '' dfc_project_branch
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git checkout ${dfc_project_branch}" >&3
 
         message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
@@ -434,12 +483,14 @@ case $dfc_project_input_choice in
 
         message_space 1
 
-        docker cp $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup/Load/Files/composer.json $dfc_global__project_name--dfc-host-php:/tmp >&1
-        docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "rm -f /dfc-project/files/composer.lock" >&1
-        docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "rm -f /dfc-project/files/composer.json" >&1
-        docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "mv /tmp/composer.json /dfc-project/files/composer.json" >&1
-        docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "chmod 0744 /dfc-project/files/composer.json" >&1
-        docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "chown dfc-user:dfc-user /dfc-project/files/composer.json" >&1
+        message_info "В контейнере 'dfc-host-php' изменяем целевую ветку" 1
+        message_space 1
+        message_input "Напишите название ветки\n"
+        message_input "=> "
+        read -p '' dfc_project_branch
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git checkout ${dfc_project_branch}" >&3
+
+        message_space 1
 
         docker cp $dfc_project_main_folder/Scripts/Containers/dfc-host-php/Setup/Load/Files/di.xml $dfc_global__project_name--dfc-host-php:/tmp >&1
         docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "rm -f /dfc-project/files/app/etc/di.xml" >&1
@@ -590,6 +641,15 @@ case $dfc_project_input_choice in
         message_input "=> "
         read -p '' dfc_project_url
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "git clone ${dfc_project_url} /dfc-project/files/moodle" >&3
+
+        message_space 1
+
+        message_info "В контейнере 'dfc-host-php' изменяем целевую ветку" 1
+        message_space 1
+        message_input "Напишите название ветки\n"
+        message_input "=> "
+        read -p '' dfc_project_branch
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php zsh -c "cd /dfc-project/files/moodle && git checkout ${dfc_project_branch}" >&3
 
         message_space 1
         message_info "Путь до дампа - './WorkFolder/Containers/dfc-host-mariadb/Dumps/Imported/db_base.sql'" 1
