@@ -447,8 +447,7 @@ case $dfc_project_input_choice in
         docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "chmod 0744 /dfc-project/files/app/etc/di.xml" >&1
         docker-compose -p $dfc_global__project_name exec -u root dfc-host-php ash -c "chown dfc-user:dfc-user /dfc-project/files/app/etc/di.xml" >&1
 
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "composer install" >&1
-        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php8 bin/magento module:enable --all" >&1
+        docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "composer install --ignore-platform-reqs" >&3
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php8 bin/magento module:disable Magento_Elasticsearch6" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php8 bin/magento module:disable Magento_Elasticsearch7" >&1
         docker-compose -p $dfc_global__project_name exec -u dfc-user dfc-host-php ash -c "php8 bin/magento module:disable Magento_Elasticsearch" >&1
