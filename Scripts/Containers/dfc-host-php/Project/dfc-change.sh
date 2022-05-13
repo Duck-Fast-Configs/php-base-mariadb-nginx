@@ -294,9 +294,9 @@ case $dfc_project_input_choice in
 "4")
     message_space 1
     message_input "Варианты разворачивания:\n"
-    message_input "1. Начать новый 'Magento 2' проект (без функций поиска)\n"
-    message_input "2. Скачать проект типа 'Magento 2' (без функций поиска) с помощью git (только https)\n"
-    message_input "3. Проектом типа 'Magento 2' (без функций поиска) поделился другой человек\n"
+    message_input "1. Начать новый 'Magento 2 (2.4.4)' проект (без функций поиска)\n"
+    message_input "2. Скачать проект типа 'Magento 2 (2.4.4)' (без функций поиска) с помощью git (только https)\n"
+    message_input "3. Проектом типа 'Magento 2 (2.4.4)' (без функций поиска) поделился другой человек\n"
     message_input "4. Выйти\n"
     message_input "=> "
     read -p '' dfc_project_container
