@@ -17,8 +17,8 @@ gitDownload() {
 }
 
 removeProject() {
-    docker-compose -p $dfc_global__project_name exec -u postgres dfc-host-mariadb ash -c "mkdir -p /dfc-project/dumps/exported/unscheduled/db_base" >&1
-    docker-compose -p $dfc_global__project_name exec -u postgres dfc-host-mariadb ash -c "mysqldump -u root -p'$dfc_global__project_mariadb_pass' db_base > /dfc-project/dumps/exported/unscheduled/db_base.sql" >&1
+    docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "mkdir -p /dfc-project/dumps/exported/unscheduled/db_base" >&1
+    docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "mysqldump -u root -p'$dfc_global__project_mariadb_pass' db_base > /dfc-project/dumps/exported/unscheduled/db_base.sql" >&1
     docker-compose -p $dfc_global__project_name down -v --rmi all --remove-orphans >&1
 }
 

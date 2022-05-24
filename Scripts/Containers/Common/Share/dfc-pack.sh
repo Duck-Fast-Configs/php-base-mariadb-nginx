@@ -36,8 +36,8 @@ docker stop $(docker ps -a -q)
 message_space 1
 message_info "2. Клонирование dfc-проекта" 1
 message_info "Ожидайте..." 1
-docker-compose -p $dfc_global__project_name exec -u postgres dfc-host-mariadb ash -c "rm -f /dfc-project/dumps/exported/unscheduled/db_base/db_base.sql" >&1
-docker-compose -p $dfc_global__project_name exec -u postgres dfc-host-mariadb ash -c "mysqldump -u root -p'$dfc_global__project_mariadb_pass' db_base > /dfc-project/dumps/exported/unscheduled/db_base/db_base.sql" >&1
+docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "rm -f /dfc-project/dumps/exported/unscheduled/db_base/db_base.sql" >&1
+docker-compose -p $dfc_global__project_name exec -u root dfc-host-mariadb ash -c "mysqldump -u root -p'$dfc_global__project_mariadb_pass' db_base > /dfc-project/dumps/exported/unscheduled/db_base/db_base.sql" >&1
 
 rm -f dfc-share.zip
 rm -rf /tmp/dfc
